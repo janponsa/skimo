@@ -14,21 +14,48 @@ var atesLayer = L.tileLayer.wms('https://geoserver.atesmaps.org/wms?TRANSPARENT=
     attribution: '<a htef="https://atesmaps.org">Atesmaps</a>'
 });
 
+const serveiTopoCache = L.tileLayer.wms("https://geoserveis.icgc.cat/icc_mapesmultibase/utm/wms/service?", {
+layers: 'topo',
+format: 'image/jpeg',
+continuousWorld: true,
+attribution: 'Institut Cartogràfic i Geològic de Catalunya',
+});
+
+const serveiOrtoCache = L.tileLayer.wms("https://geoserveis.icgc.cat/icc_mapesmultibase/utm/wms/service?", {
+layers: 'orto',
+format: 'image/jpeg',
+continuousWorld: true,
+attribution: 'Institut Cartogràfic i Geològic de Catalunya',
+});
+
+const topoMonICGCCache = L.tileLayer('https://geoserveis.icgc.cat/servei/catalunya/contextmaps/wmts/contextmaps-mapa-estandard/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: 'Institut Cartogràfic i Geològic de Catalunya CC-BY-SA-3'
+    });
+const ortoHibridaICGC = L.tileLayer('https://geoserveis.icgc.cat/styles/icgc_orto_hibrida/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: 'Institut Cartogràfic i Geològic de Catalunya CC-BY-SA-3'
+    });
+
 var map = L.map('map', {layers: [outdoors_layer]})
 map.on('load', function() {
     loadWebcams();
     loadRefus();
     getBPAData();
 });
-map.setView([42.52658601622357, 1.545020910702523], 10);
+map.setView([41.75, 1.65], 8);
 
 // refusLayer selected by default
 //map.addLayer(refusLayer);
 
 var baseMaps = {
-    "Outdoors Thunderforest Map": outdoors_layer,
-    "tpotresc": tpotresc_layer,
-    "Satellite": Esri_WorldImagery
+    "Relleu topogràfic": outdoors_layer,
+    "Topogràfica hibrida": tpotresc_layer,
+    "Satel·lit": Esri_WorldImagery,
+    "Topogràfic": serveiTopoCache,
+    "Topogràfic millorat": topoMonICGCCache,
+    "Ortofoto": serveiOrtoCache,
+    "Ortofoto hibrida": ortoHibridaICGC,
 };
 
 var overlayMaps = {
